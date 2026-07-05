@@ -163,6 +163,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       location: data.location,
                       detail: data.locationDetail,
                     ),
+                    const SizedBox(height: 16),
+                    const _RecentActivityCard(),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -175,6 +177,133 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
+// --- Recent Activity Card ---
+class _RecentActivityCard extends StatelessWidget {
+  const _RecentActivityCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Recent Activity',
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+              color: AppColors.onSurface,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const _ActivityRow(
+            icon: Icons.directions_walk,
+            iconBgColor: Color(0xFFE8F5E9),
+            iconColor: AppColors.primaryContainer,
+            title: 'Normal gait detected',
+            subtitle: '5m ago • Hallway',
+          ),
+          Divider(
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
+            height: 1,
+          ),
+          const _ActivityRow(
+            icon: Icons.kitchen,
+            iconBgColor: Color(0xFFE2EBDF),
+            iconColor: AppColors.onSurfaceVariant,
+            title: 'Fridge opened',
+            subtitle: '45m ago • Kitchen',
+          ),
+          Divider(
+            color: AppColors.outlineVariant.withValues(alpha: 0.5),
+            height: 1,
+          ),
+          const _ActivityRow(
+            icon: Icons.chair,
+            iconBgColor: Color(0xFFE8F5E9),
+            iconColor: AppColors.primaryContainer,
+            title: 'Sat down on couch',
+            subtitle: '1h ago • Living Room',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActivityRow extends StatelessWidget {
+  final IconData icon;
+  final Color iconBgColor;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+
+  const _ActivityRow({
+    required this.icon,
+    required this.iconBgColor,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: iconBgColor,
+            ),
+            child: Icon(icon, size: 20, color: iconColor),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.lexend(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.lexend(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 // --- Status Ring ---
 class _StatusRing extends StatelessWidget {
   final String label;

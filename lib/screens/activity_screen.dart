@@ -434,7 +434,7 @@ class _TimelineSection extends StatelessWidget {
   }
 }
 
-class _TimelineItem extends StatelessWidget {
+class _TimelineItem extends StatefulWidget {
   final IconData icon;
   final Color iconBgColor;
   final Color iconColor;
@@ -460,7 +460,16 @@ class _TimelineItem extends StatelessWidget {
   });
 
   @override
+  State<_TimelineItem> createState() => _TimelineItemState();
+}
+
+class _TimelineItemState extends State<_TimelineItem> {
+  bool _acknowledged = false;
+
+  @override
   Widget build(BuildContext context) {
+    final showAction = widget.actionLabel != null && !_acknowledged;
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,11 +482,19 @@ class _TimelineItem extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: iconBgColor,
+                  color: _acknowledged
+                      ? AppColors.surfaceContainerHigh
+                      : widget.iconBgColor,
                 ),
-                child: Icon(icon, size: 18, color: iconColor),
+                child: _acknowledged
+                    ? const Icon(
+                        Icons.check_circle_outline,
+                        size: 18,
+                        color: AppColors.primaryContainer,
+                      )
+                    : Icon(widget.icon, size: 18, color: widget.iconColor),
               ),
-              if (!isLast)
+              if (!widget.isLast)
                 Expanded(
                   child: Container(
                     width: 2,
@@ -491,7 +508,7 @@ class _TimelineItem extends StatelessWidget {
           // Content
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 0 : 24),
+              padding: EdgeInsets.only(bottom: widget.isLast ? 0 : 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -499,23 +516,32 @@ class _TimelineItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        title,
+                        widget.title,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.onSurface,
+                          color: _acknowledged
+                              ? AppColors.outline
+                              : AppColors.onSurface,
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        time,
+                        widget.time,
                         style: GoogleFonts.lexend(
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
                           color: AppColors.outline,
                         ),
                       ),
-                      if (badge != null) ...[
+                      if (_acknowledged && widget.badge != null) ...[
+                        const Spacer(),
+                        const Icon(
+                          Icons.check_circle_outline,
+                          size: 18,
+                          color: AppColors.primaryContainer,
+                        ),
+                      ] else if (widget.badge != null) ...[
                         const Spacer(),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -523,15 +549,15 @@ class _TimelineItem extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: badgeColor!.withValues(alpha: 0.12),
+                            color: widget.badgeColor!.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(9999),
                           ),
                           child: Text(
-                            badge!,
+                            widget.badge!,
                             style: GoogleFonts.lexend(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: badgeColor,
+                              color: widget.badgeColor,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -551,7 +577,9 @@ class _TimelineItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      detail,
+                      _acknowledged
+                          ? 'Acknowledged • Just now'
+                          : widget.detail,
                       style: GoogleFonts.lexend(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -560,12 +588,13 @@ class _TimelineItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (actionLabel != null) ...[
+                  if (showAction) ...[
                     const SizedBox(height: 10),
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            setState(() => _acknowledged = true),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.onSurface,
                           foregroundColor: Colors.white,
@@ -576,7 +605,7 @@ class _TimelineItem extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         child: Text(
-                          actionLabel!,
+                          widget.actionLabel!,
                           style: GoogleFonts.lexend(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,

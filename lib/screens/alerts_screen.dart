@@ -235,7 +235,7 @@ class _CriticalAlert extends StatelessWidget {
 }
 
 // --- Notification Card with actions ---
-class _NotificationCard extends StatelessWidget {
+class _NotificationCard extends StatefulWidget {
   final IconData icon;
   final Color iconBgColor;
   final Color iconColor;
@@ -259,7 +259,22 @@ class _NotificationCard extends StatelessWidget {
   });
 
   @override
+  State<_NotificationCard> createState() => _NotificationCardState();
+}
+
+class _NotificationCardState extends State<_NotificationCard> {
+  bool _resolved = false;
+
+  @override
   Widget build(BuildContext context) {
+    if (_resolved) {
+      return _ResolvedCard(
+        icon: widget.icon,
+        title: widget.title,
+        subtitle: 'Acknowledged • Just now',
+      );
+    }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
@@ -284,9 +299,10 @@ class _NotificationCard extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: iconBgColor,
+                  color: widget.iconBgColor,
                 ),
-                child: Icon(icon, color: iconColor, size: 22),
+                child:
+                    Icon(widget.icon, color: widget.iconColor, size: 22),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -297,7 +313,7 @@ class _NotificationCard extends StatelessWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            title,
+                            widget.title,
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
@@ -312,15 +328,16 @@ class _NotificationCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: badgeColor.withValues(alpha: 0.12),
+                            color:
+                                widget.badgeColor.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(9999),
                           ),
                           child: Text(
-                            badge,
+                            widget.badge,
                             style: GoogleFonts.lexend(
                               fontSize: 10,
                               fontWeight: FontWeight.w700,
-                              color: badgeColor,
+                              color: widget.badgeColor,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -329,7 +346,7 @@ class _NotificationCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      subtitle,
+                      widget.subtitle,
                       style: GoogleFonts.lexend(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
@@ -342,11 +359,10 @@ class _NotificationCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 18),
-          // Primary action button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => setState(() => _resolved = true),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.onSurface,
                 foregroundColor: Colors.white,
@@ -357,7 +373,7 @@ class _NotificationCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: Text(
-                primaryAction,
+                widget.primaryAction,
                 style: GoogleFonts.lexend(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -366,11 +382,10 @@ class _NotificationCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          // Secondary action button
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {},
+              onPressed: () => setState(() => _resolved = true),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(
                   color: AppColors.outlineVariant,
@@ -382,7 +397,7 @@ class _NotificationCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
               child: Text(
-                secondaryAction,
+                widget.secondaryAction,
                 style: GoogleFonts.lexend(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
