@@ -20,8 +20,8 @@ class _StatusData {
   final double ringProgress;
   final String hr;
   final double hrProgress;
-  final String sleep;
-  final double sleepProgress;
+  final String temp;
+  final double tempProgress;
   final String spo2;
   final double spo2Progress;
   final String location;
@@ -35,8 +35,8 @@ class _StatusData {
     required this.ringProgress,
     required this.hr,
     required this.hrProgress,
-    required this.sleep,
-    required this.sleepProgress,
+    required this.temp,
+    required this.tempProgress,
     required this.spo2,
     required this.spo2Progress,
     required this.location,
@@ -53,8 +53,8 @@ const _statusPresets = {
     ringProgress: 0.78,
     hr: '72',
     hrProgress: 0.65,
-    sleep: '82',
-    sleepProgress: 0.75,
+    temp: '36.6°',
+    tempProgress: 0.75,
     spo2: '98%',
     spo2Progress: 0.88,
     location: 'At Home',
@@ -68,23 +68,23 @@ const _statusPresets = {
     ringProgress: 0.45,
     hr: '104',
     hrProgress: 0.85,
-    sleep: '51',
-    sleepProgress: 0.42,
+    temp: '37.8°',
+    tempProgress: 0.42,
     spo2: '93%',
     spo2Progress: 0.62,
     location: 'At Home',
     locationDetail: 'Bedroom • 2m ago',
   ),
   HealthStatus.fall: _StatusData(
-    label: 'Fall',
-    message: 'Fall detected! Immediate attention needed.',
+    label: 'Fall Risk',
+    message: 'Fall is likely! Preventive attention needed.',
     icon: Icons.error,
     color: Color(0xFFE53935),
     ringProgress: 0.15,
     hr: '120',
     hrProgress: 0.95,
-    sleep: '34',
-    sleepProgress: 0.28,
+    temp: '38.5°',
+    tempProgress: 0.28,
     spo2: '89%',
     spo2Progress: 0.40,
     location: 'At Home',
@@ -152,8 +152,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     _VitalMetrics(
                       hr: data.hr,
                       hrProgress: data.hrProgress,
-                      sleep: data.sleep,
-                      sleepProgress: data.sleepProgress,
+                      temp: data.temp,
+                      tempProgress: data.tempProgress,
                       spo2: data.spo2,
                       spo2Progress: data.spo2Progress,
                       status: _status,
@@ -423,8 +423,8 @@ class _RingPainter extends CustomPainter {
 class _VitalMetrics extends StatelessWidget {
   final String hr;
   final double hrProgress;
-  final String sleep;
-  final double sleepProgress;
+  final String temp;
+  final double tempProgress;
   final String spo2;
   final double spo2Progress;
   final HealthStatus status;
@@ -432,8 +432,8 @@ class _VitalMetrics extends StatelessWidget {
   const _VitalMetrics({
     required this.hr,
     required this.hrProgress,
-    required this.sleep,
-    required this.sleepProgress,
+    required this.temp,
+    required this.tempProgress,
     required this.spo2,
     required this.spo2Progress,
     required this.status,
@@ -446,7 +446,7 @@ class _VitalMetrics extends StatelessWidget {
         : status == HealthStatus.atRisk
             ? const Color(0xFFFFA726)
             : const Color(0xFFE53935);
-    final sleepColor = status == HealthStatus.safe
+    final tempColor = status == HealthStatus.safe
         ? const Color(0xFF1565C0)
         : status == HealthStatus.atRisk
             ? const Color(0xFFFFA726)
@@ -468,11 +468,11 @@ class _VitalMetrics extends StatelessWidget {
           icon: Icons.favorite,
         ),
         _MetricCircle(
-          value: sleep,
-          label: 'Sleep Score',
-          progress: sleepProgress,
-          color: sleepColor,
-          icon: Icons.nightlight_round,
+          value: temp,
+          label: 'Temp',
+          progress: tempProgress,
+          color: tempColor,
+          icon: Icons.thermostat,
         ),
         _MetricCircle(
           value: spo2,

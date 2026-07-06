@@ -38,8 +38,8 @@ class AppBottomNavBar extends StatelessWidget {
                 onTap: () => onTap(0),
               ),
               _NavItem(
-                icon: Icons.monitor_heart_outlined,
-                label: 'Health',
+                icon: Icons.calendar_today_outlined,
+                label: 'Predictions',
                 isSelected: selectedIndex == 1,
                 onTap: () => onTap(1),
               ),

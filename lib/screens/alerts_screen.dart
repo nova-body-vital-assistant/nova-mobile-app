@@ -40,7 +40,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                     Text(
                       _fallAcknowledged
                           ? 'Monitoring vitals.'
-                          : 'Immediate attention required.',
+                          : 'Preventive attention required.',
                       style: GoogleFonts.lexend(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -126,11 +126,11 @@ class _CriticalAlert extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFFE53935),
+        color: const Color(0xFFFFA726),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFE53935).withValues(alpha: 0.3),
+            color: const Color(0xFFFFA726).withValues(alpha: 0.3),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -160,7 +160,7 @@ class _CriticalAlert extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Fall Detected',
+                      'Fall is Likely',
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -169,7 +169,7 @@ class _CriticalAlert extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Location: Living Room • 2 mins ago',
+                      'High risk predicted • Living Room • ~15 mins',
                       style: GoogleFonts.lexend(
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
@@ -211,7 +211,7 @@ class _CriticalAlert extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFB71C1C),
+                backgroundColor: const Color(0xFFE65100),
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
